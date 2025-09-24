@@ -1,12 +1,16 @@
 // apps/server/src/index.ts
 import express from 'express';
 import connectDB from './config/db';
+import authRoutes from './routes/auth.routes';
 
-// Connect to database
 connectDB();
-
 const app = express();
 const PORT = process.env.PORT || 8000;
+
+// ... other middleware later
+
+// Routes
+app.use('/api/auth', authRoutes);
 
 app.get('/api', (req, res) => {
   res.send('Hello from the Backend!');
