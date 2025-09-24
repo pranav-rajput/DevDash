@@ -1,14 +1,18 @@
-// apps/server/src/routes/auth.routes.ts
 import { Router } from 'express';
+import passport from 'passport';
 
 const router = Router();
 
-// @desc    Auth with GitHub
-// @route   GET /api/auth/github
-router.get('/github', (req, res) => res.send('Redirecting to GitHub...'));
+router.get('/github', passport.authenticate('github', { scope: ['user:email', 'read:user'] }));
 
-// @desc    GitHub auth callback
-// @route   GET /api/auth/github/callback
-router.get('/github/callback', (req, res) => res.send('Callback from GitHub!'));
+
+router.get(
+  '/github/callback',
+  passport.authenticate('github', { failureRedirect: 'http://localhost:5173/login' }),
+  (req, res) => {
+    
+    res.redirect('http://localhost:5173/dashboard');
+  }
+);
 
 export default router;
